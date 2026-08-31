@@ -1,6 +1,11 @@
 "use client";
 
 /*
+  Live webcam computer-vision interface.
+*/
+import CameraVision from "./CameraVision";
+
+/*
   VISION LAB
   ==========
 
@@ -449,6 +454,32 @@ export default function VisionLab() {
 
       </div>
 
+        {/* 
+            ============================================================
+            LIVE CAMERA MODE
+            ============================================================
+
+            This is separate from image upload.
+
+            Upload mode:
+                Image → OpenCV
+
+            Camera mode:
+                Webcam → Video → OpenCV
+
+            Keeping them separate makes the Vision Lab easier to
+            understand and easier to expand later.
+        */}
+
+        <div className="mt-16">
+
+            <p className="mb-6 font-mono text-[10px] tracking-[0.2em] text-zinc-600">
+                03.1 — LIVE CAMERA
+            </p>
+
+            <CameraVision />
+
+        </div>
     </section>
   );
 }
