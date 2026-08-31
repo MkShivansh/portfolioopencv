@@ -24,3 +24,544 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+  ============================================================
+  PORTFOLIO ANIMATIONS
+  ============================================================
+
+  These animations are intentionally implemented with CSS.
+
+  Why?
+
+  Important portfolio content should not depend on JavaScript
+  or IntersectionObserver to become visible.
+
+  CSS animations are handled directly by the browser and are
+  therefore more reliable across desktop, tablet and mobile.
+*/
+
+
+/*
+  ------------------------------------------------------------
+  1. Fade + slide upward
+  ------------------------------------------------------------
+
+  The element starts slightly lower and transparent, then
+  moves upward while becoming visible.
+*/
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/*
+  Generic class for elements that should use the fade-up
+  animation.
+
+  "both" means the element keeps the final animation state
+  after the animation has finished.
+*/
+.animate-fade-up {
+  animation: fadeUp 0.7s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  2. Fade + slide from the left
+  ------------------------------------------------------------
+*/
+@keyframes fadeFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-from-left {
+  animation: fadeFromLeft 0.7s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  3. Fade + slide from the right
+  ------------------------------------------------------------
+*/
+@keyframes fadeFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-from-right {
+  animation: fadeFromRight 0.7s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  4. Simple fade
+  ------------------------------------------------------------
+*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  ACCESSIBILITY
+  ------------------------------------------------------------
+
+  Some users configure their operating system/browser to
+  reduce motion because animations can cause discomfort.
+
+  In that situation, we completely disable our animations
+  while keeping all content visible.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-from-left,
+  .animate-from-right,
+  .animate-fade-in {
+    animation: none;
+  }
+}
+
+/*
+  ============================================================
+  AI PIPELINE ANIMATIONS
+  ============================================================
+
+  These animations are intentionally CSS-based.
+
+  They do not depend on Motion or viewport detection, so the
+  visualization remains reliable on phones, tablets and
+  desktop browsers.
+*/
+
+
+/*
+  ------------------------------------------------------------
+  PIPELINE NODE
+  ------------------------------------------------------------
+
+  Each processing stage starts slightly lower and transparent,
+  then moves into its normal position.
+*/
+@keyframes pipelineNodeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pipeline-node {
+  /*
+    "both" means the element keeps the final visible state
+    after the animation finishes.
+  */
+  animation: pipelineNodeIn 0.6s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  CONNECTING LINES
+  ------------------------------------------------------------
+
+  The lines grow horizontally to visually connect the
+  processing stages.
+*/
+@keyframes pipelineLineIn {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.pipeline-line {
+  animation: pipelineLineIn 0.6s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  OUTPUT CARDS
+  ------------------------------------------------------------
+*/
+@keyframes pipelineOutputIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pipeline-output {
+  animation: pipelineOutputIn 0.6s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  PROCESSING INDICATOR
+  ------------------------------------------------------------
+
+  The dot continuously fades in and out to suggest that the
+  AI processing pipeline is active.
+*/
+@keyframes pipelinePulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.pipeline-pulse {
+  animation: pipelinePulse 2s ease-in-out infinite;
+}
+
+
+/*
+  ------------------------------------------------------------
+  ACCESSIBILITY
+  ------------------------------------------------------------
+
+  If a visitor has enabled "Reduce Motion" on their device,
+  we disable movement while keeping every element visible.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-node,
+  .pipeline-line,
+  .pipeline-output,
+  .pipeline-pulse {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+  ============================================================
+  HERO ANIMATIONS
+  ============================================================
+
+  The hero contains the first information a visitor sees.
+
+  These animations are therefore implemented with CSS rather
+  than depending on JavaScript viewport detection.
+*/
+
+
+/*
+  ------------------------------------------------------------
+  HERO EYEBROW
+  ------------------------------------------------------------
+*/
+@keyframes heroEyebrowIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-eyebrow {
+  animation: heroEyebrowIn 0.6s ease-out both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  HERO HEADLINE
+  ------------------------------------------------------------
+
+  Each line uses the same animation but receives a different
+  delay. This creates a sequential text reveal.
+*/
+@keyframes heroLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-line {
+  animation: heroLineIn 0.7s ease-out both;
+}
+
+
+/*
+  The three headline lines appear one after another.
+
+  Line 1 → immediately
+  Line 2 → 150ms later
+  Line 3 → 300ms later
+*/
+.hero-line-1 {
+  animation-delay: 150ms;
+}
+
+.hero-line-2 {
+  animation-delay: 300ms;
+}
+
+.hero-line-3 {
+  animation-delay: 450ms;
+}
+
+
+/*
+  ------------------------------------------------------------
+  HERO DESCRIPTION
+  ------------------------------------------------------------
+*/
+@keyframes heroDescriptionIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-description {
+  animation: heroDescriptionIn 0.7s ease-out 650ms both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  HERO BUTTONS
+  ------------------------------------------------------------
+*/
+.hero-buttons {
+  animation: heroDescriptionIn 0.7s ease-out 800ms both;
+}
+
+
+/*
+  ------------------------------------------------------------
+  ACCESSIBILITY
+  ------------------------------------------------------------
+
+  Visitors who prefer reduced motion still get all the
+  content immediately, without animation.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow,
+  .hero-line,
+  .hero-description,
+  .hero-buttons {
+    animation: none;
+  }
+}
+
+/*
+  ------------------------------------------------------------
+  HERO STATUS
+  ------------------------------------------------------------
+
+  A very subtle fade-in for the small status text in the
+  bottom-right of the desktop hero.
+*/
+.hero-status {
+  animation: fadeIn 1s ease-out 1.2s both;
+}
+
+/*
+  ============================================================
+  MOBILE NAVIGATION
+  ============================================================
+
+  The native <details> element gets an open state when the
+  visitor taps the hamburger.
+*/
+
+details[open] summary {
+  border-color: rgb(82 82 91);
+  color: white;
+}
+
+/*
+  ============================================================
+  NAVBAR ENTRANCE ANIMATION
+  ============================================================
+
+  The navbar starts slightly above its final position and
+  fades into view.
+
+  We use CSS rather than Motion here because navigation is
+  essential functionality and must remain independent of
+  JavaScript hydration.
+*/
+
+@keyframes navbarSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-entrance {
+  animation: navbarSlideIn 0.6s ease-out both;
+}
+
+
+/*
+  If the visitor has requested reduced motion through their
+  operating system/browser, show the navbar immediately
+  without movement.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .navbar-entrance {
+    animation: none;
+  }
+}
+
+/*
+  ============================================================
+  SECURE VAULT ANIMATIONS
+  ============================================================
+*/
+
+
+/*
+  Each security stage fades upward into view.
+*/
+@keyframes vaultNodeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vault-node {
+  animation: vaultNodeIn 0.6s ease-out both;
+}
+
+
+/*
+  Vertical connections appear between security stages.
+*/
+@keyframes vaultLineIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.vault-line {
+  transform-origin: top;
+  animation: vaultLineIn 0.4s ease-out both;
+}
+
+
+/*
+  Subtle security-status pulse.
+*/
+@keyframes vaultPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.vault-pulse {
+  animation: vaultPulse 2s ease-in-out infinite;
+}
+
+
+/*
+  Respect the visitor's reduced-motion preference.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .vault-node,
+  .vault-line,
+  .vault-pulse {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
