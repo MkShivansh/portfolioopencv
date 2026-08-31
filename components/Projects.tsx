@@ -1,6 +1,6 @@
 "use client";
 
-import VaultVisual from "./VaultVisual";
+// import VaultVisual from "./VaultVisual";
 
 // Visual representation of the AI Meeting Summarizer pipeline.
 import ProjectVisual from "./ProjectVisual";

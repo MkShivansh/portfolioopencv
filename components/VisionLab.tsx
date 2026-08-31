@@ -1,3 +1,5 @@
+"use client";
+
 /*
   VISION LAB
   ==========
@@ -24,19 +26,135 @@
   layout independently from the computer-vision logic.
 */
 
+
+import { useState } from "react";
+
 export default function VisionLab() {
-  return (
     /*
-      Main section.
+        Stores the selected image as a browser Data URL.
 
-      The id allows the navbar to navigate directly to the
-      Vision Lab using:
+        The image remains on the visitor's device and is not
+        uploaded to a server.
 
-          #vision
+        Example:
 
-      "scroll-mt-24" prevents the navbar from covering the
-      heading when the visitor jumps to this section.
+        User selects photo.jpg
+                ↓
+        Browser creates a temporary URL
+                ↓
+        imageUrl = "blob:..."
+                ↓
+        <img> displays it
     */
+
+    /*
+        Stores the selected image as a browser Data URL.
+    */
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+
+    /*
+        Handles the image selected by the visitor.
+
+        Instead of creating a temporary "blob:" URL, we read the
+        image directly into the browser as a Data URL.
+
+        This is slightly more compatible with mobile browsers
+        because the resulting image URL is self-contained.
+
+        IMPORTANT:
+        The image is still processed locally.
+        Nothing is uploaded to a server.
+    */
+    
+    /*
+    ============================================================
+    NATIVE FILE INPUT LISTENER
+    ============================================================
+
+    We are deliberately listening to the browser's native
+    "change" event instead of React's onChange handler.
+
+    This gives mobile browsers a direct DOM-level path:
+
+        Phone Gallery
+            ↓
+        Native <input>
+            ↓
+        Native change event
+            ↓
+        handleImageUpload()
+            ↓
+        React state
+            ↓
+        Image preview
+
+    This is specifically useful for troubleshooting the
+    mobile file-picker behavior we are seeing.
+    */
+
+    /*
+        Handles the image selected by the visitor.
+
+        FileReader converts the selected local image into a Data URL.
+
+        The image never leaves the visitor's device.
+    */
+    const handleImageUpload = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        /*
+            Stop if the visitor cancelled the file picker.
+        */
+        if (!file) {
+            return;
+        }
+
+        /*
+            Only allow image files.
+        */
+        if (!file.type.startsWith("image/")) {
+            return;
+        }
+
+        /*
+            Read the image locally.
+        */
+        const reader = new FileReader();
+
+        /*
+            Once the browser finishes reading the image,
+            store the result in React state.
+        */
+        reader.onload = () => {
+            if (typeof reader.result === "string") {
+            setImageUrl(reader.result);
+            }
+        };
+
+        /*
+            Convert the local image into a browser-readable
+            Data URL.
+        */
+        reader.readAsDataURL(file);
+        };
+
+
+
+    /*
+        Main section.
+
+        The id allows the navbar to navigate directly to the
+        Vision Lab using:
+
+            #vision
+
+        "scroll-mt-24" prevents the navbar from covering the
+        heading when the visitor jumps to this section.
+    */
+   return(
     <section
       id="vision"
       className="mx-auto max-w-7xl px-6 py-32 md:px-10"
@@ -146,21 +264,55 @@ export default function VisionLab() {
             />
 
             {/* Empty viewport */}
-            <div className="relative flex h-64 w-full max-w-xl items-center justify-center border border-dashed border-zinc-800 md:h-80">
+            {/*
+                IMAGE VIEWPORT
 
-              <div className="text-center">
+                If there is no selected image:
+                    Show the "NO INPUT" placeholder.
 
-                <p className="font-mono text-[10px] tracking-[0.2em] text-zinc-700">
-                  NO INPUT
-                </p>
+                If an image has been selected:
+                    Display that image inside the viewport.
 
-                <p className="mt-3 text-sm text-zinc-600">
-                  Upload an image to begin
-                </p>
+                This conditional rendering is controlled by imageUrl.
+            */}
+                <div className="relative flex h-64 w-full max-w-xl items-center justify-center overflow-hidden border border-dashed border-zinc-800 md:h-80">
 
-              </div>
+                    {imageUrl ? (
 
-            </div>
+                        /*
+                            Selected image.
+
+                            "object-contain" ensures the entire image remains
+                            visible without being cropped.
+
+                            "max-h-full max-w-full" prevents large images from
+                            overflowing the viewport.
+                        */
+                        <img
+                            src={imageUrl}
+                            alt="Selected image for computer vision processing"
+                            className="max-h-full max-w-full object-contain"
+                        />
+                    ) : (
+
+                        /*
+                            No image selected yet.
+                        */
+                        <div className="text-center">
+
+                            <p className="font-mono text-[10px] tracking-[0.2em] text-zinc-700">
+                                NO INPUT
+                            </p>
+
+                            <p className="mt-3 text-sm text-zinc-600">
+                                Upload an image to begin
+                            </p>
+
+                        </div>
+
+                    )}
+
+                </div>
 
           </div>
 
@@ -228,23 +380,48 @@ export default function VisionLab() {
 
 
             {/* 
-              Input controls.
+                Input controls.
 
-              The actual file input will be connected in the
-              next step.
+                The image upload control is now connected.
+                The selected image is handled locally in the browser.
             */}
             <div className="mt-auto p-5">
+                {/*
+                    ============================================================
+                    IMAGE UPLOAD
+                    ============================================================
 
-              <button
-                type="button"
-                className="w-full border border-zinc-700 px-4 py-3 text-xs text-zinc-300 transition-colors hover:border-zinc-500 hover:text-white"
-              >
-                Upload Image
-              </button>
+                    We are intentionally using the browser's native file input
+                    here.
 
-              <p className="mt-3 text-center font-mono text-[9px] tracking-[0.1em] text-zinc-700">
-                PROCESSING STAYS ON YOUR DEVICE
-              </p>
+                    This removes the hidden-input + label interaction from the
+                    equation and gives mobile browsers a completely standard
+                    file-upload control.
+                */}
+                <input
+                    id="vision-image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="block w-full cursor-pointer text-xs text-zinc-500 file:mr-4 file:border file:border-zinc-700 file:bg-transparent file:px-4 file:py-3 file:text-xs file:text-zinc-300"
+                />
+
+                <p className="mt-3 text-center font-mono text-[9px] tracking-[0.1em] text-zinc-700">
+                    PROCESSING STAYS ON YOUR DEVICE
+                </p>
+
+                {/*
+                    TEMPORARY DEBUG STATUS
+
+                    We'll remove this once the upload works correctly.
+                */}
+                {/* <p className="mt-2 text-center font-mono text-[9px] text-zinc-600">
+                    {uploadStatus}
+                </p>
+
+                <p className="mt-3 text-center font-mono text-[9px] tracking-[0.1em] text-zinc-700">
+                    PROCESSING STAYS ON YOUR DEVICE
+                </p> */}
 
             </div>
 
